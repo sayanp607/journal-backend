@@ -16,7 +16,7 @@ cd journal-backend
 ### **2️⃣ Install Dependencies**
 ```sh
 npm init -y
-npm install express mongoose cors dotenv
+npm install bcryptjs jsonwebtoken express mongoose cors dotenv
 npm install --save-dev nodemon
 ```
 ### **3️⃣ Set Up Environment Variables**

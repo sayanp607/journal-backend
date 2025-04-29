@@ -1,7 +1,8 @@
  # JOURNAL BACKEND
 
 ## 🌍 About the Project
-Proper Registration and Login system using JWT authentication .
+- Proper Registration and Login system using JWT authentication .
+- Add,view,edit,delete journals using CRUD operations.
  <!--line-->
 
  

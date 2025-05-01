@@ -2,7 +2,14 @@ const Journal = require('../models/Journal');
 
 exports.addJournal = async (req, res) => {
   try {
-    const { emotion, howWasYourDay, whatWentWell, whatCouldBeBetter, whatDidNotGoWell, otherComments } = req.body;
+    const {
+      emotion,
+      howWasYourDay,
+      whatWentWell,
+      whatCouldBeBetter,
+      whatDidNotGoWell,
+      otherComments,
+    } = req.body;
 
     const newJournal = await Journal.create({
       user: req.user._id,
@@ -14,17 +21,11 @@ exports.addJournal = async (req, res) => {
       otherComments,
     });
 
-    res.status(201).json(newJournal);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: 'Server error' });
-  }
-};
-
-exports.getMyJournals = async (req, res) => {
-  try {
-    const journals = await Journal.find({ user: req.user._id }).sort({ createdAt: -1 });
-    res.status(200).json(journals);
+    res.status(201).json({
+      ...newJournal._doc,
+      createdAt: newJournal.createdAt,
+      updatedAt: newJournal.updatedAt,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server error' });
@@ -41,14 +42,33 @@ exports.updateJournal = async (req, res) => {
       return res.status(401).json({ message: 'Not authorized' });
     }
 
-    const updatedJournal = await Journal.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedJournal = await Journal.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
 
-    res.status(200).json(updatedJournal);
+    res.status(200).json({
+      ...updatedJournal._doc,
+      createdAt: updatedJournal.createdAt,
+      updatedAt: updatedJournal.updatedAt,
+    });
   } catch (err) {
     console.error(err.message);
     res.status(500).json({ message: 'Server error' });
   }
 };
+
+exports.getMyJournals = async (req, res) => {
+  try {
+    const journals = await Journal.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.status(200).json(journals);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
 
 
 exports.deleteJournal = async (req, res) => {
